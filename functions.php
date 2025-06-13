@@ -156,9 +156,46 @@ function printFailure($message = "none")
     echo json_encode(array("status" => "failure" , "message" => $message));
 }
 
-// function sendEmail($to , $title , $body){
-// $header = "from: suppport@mirnahasan.com" . "\n" . "CC:mirnamhasan50m@gmail.com";
-// mail($to , $title,$body, $header);
+function sendEmail($to , $title , $body){
+$header = "From : suppport@mirnahasan.com" . "\n" . "CC:mirnahasan1995@gmail.com";
+mail($to , $title,$body, $header);
+echo "Success" ;
+
+}
 
 
-// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
