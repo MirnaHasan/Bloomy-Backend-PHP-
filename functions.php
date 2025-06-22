@@ -59,7 +59,7 @@ function insertData($table, $data, $json = true)
     return $count;
 }
 
-function updateData($table, $data, $where, $whereParams = [], $json = true)
+function updateData($table, $data, $where, $whereParams = [],$json = true)
 {
     global $con;
     $cols = [];
@@ -86,6 +86,7 @@ function updateData($table, $data, $where, $whereParams = [], $json = true)
             echo json_encode(array("status" => "failure"));
         }
     }
+    
     return $count;
 }
 
