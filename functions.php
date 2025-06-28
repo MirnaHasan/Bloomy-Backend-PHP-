@@ -139,28 +139,51 @@ function deleteData($table, $where, $values = [], $json = true)
     }
     return $count;
 }
-
 function imageUpload($imageRequest)
 {
-    global $msgError;
-    $imagename  = rand(1000, 10000) . $_FILES[$imageRequest]['name'];
-    $imagetmp   = $_FILES[$imageRequest]['tmp_name'];
-    $imagesize  = $_FILES[$imageRequest]['size'];
-    $allowExt   = array("jpg", "png", "gif", "mp3", "pdf");
+    // ثابت لتحويل ميغا بايت إلى بايت (2 ميغا بايت)
+    define('MAX_FILE_SIZE', 2 * 1024 * 1024); // 2 ميجا بايت
+
+    // تحقق من وجود الملف في الطلب
+    if (!isset($_FILES[$imageRequest])) {
+        return ["status" => "fail", "error" => "No file uploaded"];
+    }
+
+    $file = $_FILES[$imageRequest];
+    $imagename  = rand(1000, 10000) . "_" . basename($file['name']);
+    $imagetmp   = $file['tmp_name'];
+    $imagesize  = $file['size'];
+
+    $allowedExt = ["jpg", "png", "gif", "mp3", "pdf" ,"svg"];
     $strToArray = explode(".", $imagename);
     $ext        = strtolower(end($strToArray));
 
-    if (!empty($imagename) && !in_array($ext, $allowExt)) {
-        $msgError = "EXT";
+    // تحقق من نوع الملف
+    if (!in_array($ext, $allowedExt)) {
+        return ["status" => "fail", "error" => "Invalid file extension"];
     }
-    if ($imagesize > 2 * MB) {
-        $msgError = "size";
+
+    // تحقق من حجم الملف
+    if ($imagesize > MAX_FILE_SIZE) {
+        return ["status" => "fail", "error" => "File size exceeds limit"];
     }
-    if (empty($msgError)) {
-        move_uploaded_file($imagetmp,  "../upload/" . $imagename);
-        return $imagename;
+
+    // مسار الحفظ
+   
+    $uploadDir = __DIR__ . "/upload/";
+
+    // أنشئ المجلد إذا لم يكن موجودًا
+    if (!is_dir($uploadDir)) {
+        mkdir($uploadDir, 0777, true);
+    }
+
+    $uploadPath = $uploadDir . $imagename;
+
+    // نقل الملف إلى المجلد
+    if (move_uploaded_file($imagetmp, $uploadPath)) {
+        return ["status" => "success", "filename" => $imagename];
     } else {
-        return "fail";
+        return ["status" => "fail", "error" => "Failed to move uploaded file"];
     }
 }
 
