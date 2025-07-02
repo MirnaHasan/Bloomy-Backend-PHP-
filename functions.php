@@ -142,7 +142,7 @@ function deleteData($table, $where, $values = [], $json = true)
 function imageUpload($imageRequest)
 {
     // ثابت لتحويل ميغا بايت إلى بايت (2 ميغا بايت)
-    define('MAX_FILE_SIZE', 2 * 1024 * 1024); // 2 ميجا بايت
+    define('MAX_FILE_SIZE', 6* 1024 * 1024); // 2 ميجا بايت
 
     // تحقق من وجود الملف في الطلب
     if (!isset($_FILES[$imageRequest])) {
