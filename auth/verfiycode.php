@@ -3,7 +3,11 @@
 include "../connect.php"; 
 
 $email = filterRequest("email"); 
+<<<<<<< HEAD
 $verfiy = filterRequest("verfiycode");
+=======
+$verfiy = filterRequest("verifycode");
+>>>>>>> master
 
 // استخدم معاملات آمنة
 $stmt = $con->prepare("SELECT * FROM users WHERE users_email = ? AND users_verfiycode = ?");
