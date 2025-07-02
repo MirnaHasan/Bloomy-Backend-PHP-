@@ -7,9 +7,6 @@ function filterRequest($requestname)
     return isset($_POST[$requestname]) ? htmlspecialchars(strip_tags($_POST[$requestname])) : '';
 }
 
-<<<<<<< HEAD
-function getAllData($table, $where = null, $values = null)
-=======
 function getAllData($table, $where = null, $values = null, $json =true)
 {
     global $con;
@@ -17,34 +14,30 @@ function getAllData($table, $where = null, $values = null, $json =true)
 
     if ($where == null) {
          $stmt = $con->prepare("SELECT * FROM $table");
-      
-    } else {  $stmt = $con->prepare("SELECT * FROM $table WHERE $where");
-
+    } else {  
+         $stmt = $con->prepare("SELECT * FROM $table WHERE $where");
     }
     $stmt->execute($values);
 
     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     $count  = $stmt->rowCount();
     if ($json == true){   
-    if ($count > 0){
-        echo json_encode(array("status" => "success", "data" => $data));
+        if ($count > 0){
+            echo json_encode(array("status" => "success", "data" => $data));
+        } else {
+            echo json_encode(array("status" => "failure"));
+        }
+        return $count;
     } else {
-        echo json_encode(array("status" => "failure"));
-    }
-    return $count;
-    }else{
         if ($count>0){
-               return $data ;
-
-        }else{ return json_encode(array("status" => "failure"));}
-
-        
-     
+            return $data ;
+        } else { 
+            return json_encode(array("status" => "failure"));
+        }
     }
-
 }
+
 function getData($table, $where = null, $values = null)
->>>>>>> master
 {
     global $con;
     $data = array();
@@ -57,11 +50,8 @@ function getData($table, $where = null, $values = null)
         $stmt->execute();
     }
 
-<<<<<<< HEAD
-    $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-=======
     $data = $stmt->fetch(PDO::FETCH_ASSOC);
->>>>>>> master
+
     $count  = $stmt->rowCount();
 
     if ($count > 0){
@@ -100,11 +90,7 @@ function insertData($table, $data, $json = true)
     return $count;
 }
 
-<<<<<<< HEAD
 function updateData($table, $data, $where, $whereParams = [], $json = true)
-=======
-function updateData($table, $data, $where, $whereParams = [],$json = true)
->>>>>>> master
 {
     global $con;
     $cols = [];
@@ -131,10 +117,7 @@ function updateData($table, $data, $where, $whereParams = [],$json = true)
             echo json_encode(array("status" => "failure"));
         }
     }
-<<<<<<< HEAD
-=======
-    
->>>>>>> master
+
     return $count;
 }
 
@@ -154,36 +137,12 @@ function deleteData($table, $where, $values = [], $json = true)
     }
     return $count;
 }
-<<<<<<< HEAD
 
 function imageUpload($imageRequest)
 {
-    global $msgError;
-    $imagename  = rand(1000, 10000) . $_FILES[$imageRequest]['name'];
-    $imagetmp   = $_FILES[$imageRequest]['tmp_name'];
-    $imagesize  = $_FILES[$imageRequest]['size'];
-    $allowExt   = array("jpg", "png", "gif", "mp3", "pdf");
-    $strToArray = explode(".", $imagename);
-    $ext        = strtolower(end($strToArray));
+    // ثابت لتحويل ميغا بايت إلى بايت (6 ميغا بايت)
+    define('MAX_FILE_SIZE', 6 * 1024 * 1024); 
 
-    if (!empty($imagename) && !in_array($ext, $allowExt)) {
-        $msgError = "EXT";
-    }
-    if ($imagesize > 2 * MB) {
-        $msgError = "size";
-    }
-    if (empty($msgError)) {
-        move_uploaded_file($imagetmp,  "../upload/" . $imagename);
-        return $imagename;
-    } else {
-        return "fail";
-=======
-function imageUpload($imageRequest)
-{
-    // ثابت لتحويل ميغا بايت إلى بايت (2 ميغا بايت)
-    define('MAX_FILE_SIZE', 6* 1024 * 1024); // 2 ميجا بايت
-
-    // تحقق من وجود الملف في الطلب
     if (!isset($_FILES[$imageRequest])) {
         return ["status" => "fail", "error" => "No file uploaded"];
     }
@@ -193,37 +152,30 @@ function imageUpload($imageRequest)
     $imagetmp   = $file['tmp_name'];
     $imagesize  = $file['size'];
 
-    $allowedExt = ["jpg", "png", "gif", "mp3", "pdf" ,"svg"];
+    $allowedExt = ["jpg", "png", "gif", "mp3", "pdf", "svg"];
     $strToArray = explode(".", $imagename);
     $ext        = strtolower(end($strToArray));
 
-    // تحقق من نوع الملف
     if (!in_array($ext, $allowedExt)) {
         return ["status" => "fail", "error" => "Invalid file extension"];
     }
 
-    // تحقق من حجم الملف
     if ($imagesize > MAX_FILE_SIZE) {
         return ["status" => "fail", "error" => "File size exceeds limit"];
     }
 
-    // مسار الحفظ
-   
     $uploadDir = __DIR__ . "/upload/";
 
-    // أنشئ المجلد إذا لم يكن موجودًا
     if (!is_dir($uploadDir)) {
         mkdir($uploadDir, 0777, true);
     }
 
     $uploadPath = $uploadDir . $imagename;
 
-    // نقل الملف إلى المجلد
     if (move_uploaded_file($imagetmp, $uploadPath)) {
         return ["status" => "success", "filename" => $imagename];
     } else {
         return ["status" => "fail", "error" => "Failed to move uploaded file"];
->>>>>>> master
     }
 }
 
@@ -252,67 +204,26 @@ function printFailure($message = "none")
 {
     echo json_encode(array("status" => "failure" , "message" => $message));
 }
-<<<<<<< HEAD
 
-function sendEmail($to , $title , $body){
-$header = "From : suppport@mirnahasan.com" . "\n" . "CC:mirnahasan1995@gmail.com";
-mail($to , $title,$body, $header);
-echo "Success" ;
-
+function sendEmail($to, $title, $body)
+{
+    $header = "From: support@mirnahasan.com" . "\n" . "CC:mirnahasan1995@gmail.com";
+    mail($to, $title, $body, $header);
+    echo "Success";
 }
-=======
+
 function printSuccess($message = "none")
 {
     echo json_encode(array("status" => "success" , "message" => $message));
 }
-function Result($count){
-    if ($count>0){
-        printSuccess("success") ;
-    }else{
-        printFailure("failure") ;
+
+function Result($count)
+{
+    if ($count > 0){
+        printSuccess("success");
+    } else {
+        printFailure("failure");
     }
 }
-// function sendEmail($to , $title , $body){
-// $header = "From : suppport@mirnahasan.com" . "\n" . "CC:mirnahasan1995@gmail.com";
-// mail($to , $title,$body, $header);
-// echo "Success" ;
 
-// }
->>>>>>> master
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+?>
