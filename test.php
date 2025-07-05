@@ -1,12 +1,12 @@
 
-<<<<<<< HEAD
+
 
 <?php
 
 // sendEmail("mirnamhasan50@gmail.com"  ,"Hi" , "i am mirna"  );
 
 ?>
-=======
+
 <?php
 include "connect.php";
 
@@ -23,4 +23,4 @@ if ($result['status'] == "success") {
         "error" => $result['error']
     ]);
 }
->>>>>>> master
+ 

@@ -138,9 +138,8 @@ function deleteData($table, $where, $values = [], $json = true)
     return $count;
 }
 
-function imageUpload($imageRequest)
+function imageUpload($imageRequest, $folder = "")
 {
-    // ثابت لتحويل ميغا بايت إلى بايت (6 ميغا بايت)
     define('MAX_FILE_SIZE', 6 * 1024 * 1024); 
 
     if (!isset($_FILES[$imageRequest])) {
@@ -160,12 +159,7 @@ function imageUpload($imageRequest)
         return ["status" => "fail", "error" => "Invalid file extension"];
     }
 
-    if ($imagesize > MAX_FILE_SIZE) {
-        return ["status" => "fail", "error" => "File size exceeds limit"];
-    }
-
-    $uploadDir = __DIR__ . "/upload/";
-
+    $uploadDir = __DIR__ . "/upload/$folder/";
     if (!is_dir($uploadDir)) {
         mkdir($uploadDir, 0777, true);
     }
