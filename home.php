@@ -9,7 +9,7 @@ $categories =  getAllData("categories" , null , null , false) ;
 
 $alldata['categories'] = $categories ;
 
-$items =  getAllData("itemsview" , "items_discount!=0" , null , false) ;
+$items =  getAllData("items1view" , "items_discount!=0" , null , false) ;
 
 $alldata['items'] = $items ;
 
