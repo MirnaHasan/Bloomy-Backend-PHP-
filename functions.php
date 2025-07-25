@@ -203,7 +203,7 @@ function sendEmail($to, $title, $body)
 {
     $header = "From: support@mirnahasan.com" . "\n" . "CC:mirnahasan1995@gmail.com";
     mail($to, $title, $body, $header);
-    echo "Success";
+   
 }
 
 function printSuccess($message = "none")
