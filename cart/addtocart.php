@@ -3,7 +3,7 @@
 include "../connect.php" ; 
 $userid = filterRequest("userid") ;
 $itemsid = filterRequest("itemsid") ; 
-$count = getData("cart" , "cart_usersid = $userid  AND  cart_itemsid = $itemsid") ;
+$count = getData("cart" , "cart_usersid = $userid  AND  cart_itemsid = $itemsid" , null , false) ;
 
 
 
