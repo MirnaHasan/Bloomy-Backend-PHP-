@@ -5,8 +5,6 @@ $userid = filterRequest("userid") ;
 $itemsid = filterRequest("itemsid") ; 
 $count = getData("cart" , "cart_usersid = $userid  AND  cart_itemsid = $itemsid" , null , false) ;
 
-
-
     $data = array(
         "cart_usersid" => $userid ,
         "cart_itemsid"=> $itemsid , 
