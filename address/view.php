@@ -2,6 +2,7 @@
 <?php 
 
 include "../connect.php" ;
-$addressid = filterRequest("addressid") ;
+$addressuserid = filterRequest("addressuserid") ;
 
-getAllData("address" , "address_usersid = $addressid") ;
+getAllData("address" , "address_usersid = $addressuserid ") ;
+/// عرض العناوين الخاصة ب مستخدم 
