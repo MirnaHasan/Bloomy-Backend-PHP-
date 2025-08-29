@@ -18,3 +18,18 @@ $data = array (
 
 ) ; 
  $count =  insertData("orders" , $data , false) ; 
+ if ($count > 0 ){
+
+    $stmt = $con ->prepare("SELECT MAX(orders_id) FROM orders ") ; 
+
+    $stmt->execute() ; 
+    $maxorderid = $stmt->fetchColumn() ; 
+
+$data = array(
+    "cart_orders" => $maxorderid
+) ;
+
+    updateData("cart" , $data , "cart_usersid = $usersid  AND cart_orders = 0 ") ; 
+
+
+ }
