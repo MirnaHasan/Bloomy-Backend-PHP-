@@ -37,34 +37,25 @@ function getAllData($table, $where = null, $values = null, $json =true)
     }
 }
 
-function getData($table, $where = null, $values = null , $json = true)
+function getData($table, $where = null, $values = null, $json = true)
 {
     global $con;
     $data = array();
-
-    if ($where) {
-        $stmt = $con->prepare("SELECT * FROM $table WHERE $where");
-        $stmt->execute($values);
-    } else {
-        $stmt = $con->prepare("SELECT * FROM $table");
-        $stmt->execute();
-    }
-
+    $stmt = $con->prepare("SELECT  * FROM $table WHERE   $where ");
+    $stmt->execute($values);
     $data = $stmt->fetch(PDO::FETCH_ASSOC);
-
     $count  = $stmt->rowCount();
-if ($json==true){
-    if ($count > 0){
-        echo json_encode(array("status" => "success", "data" => $data));
+    if ($json == true) {
+        if ($count > 0) {
+            echo json_encode(array("status" => "success", "data" => $data));
+        } else {
+            echo json_encode(array("status" => "failure"));
+        }
     } else {
-        echo json_encode(array("status" => "failure"));
+        return $count;
     }
-
-}else {
-
-    return $count;
 }
-}
+
     
 
 function insertData($table, $data, $json = true)
@@ -224,5 +215,6 @@ function Result($count)
         printFailure("failure");
     }
 }
-
 ?>
+
+
