@@ -1,26 +1,11 @@
 
+ <?php
 
+$notAuth = "" ; 
 
-<?php
+include "connect.php" ; 
+//  sendFCMTopic("اختبار إشعار", "هذه رسالة تجريبية من PHP", "all-users"); 
+ sendFCMTopic("hi"  , "How Are You" , "users" , "" , "") ; 
 
-// sendEmail("mirnamhasan50@gmail.com"  ,"Hi" , "i am mirna"  );
-
+// echo $response ;
 ?>
-
-<?php
-include "connect.php";
-
-$result = imageUpload("file");
-
-if ($result['status'] == "success") {
-    echo json_encode([
-        "status" => "success",
-        "filename" => $result['filename']
-    ]);
-} else {
-    echo json_encode([
-        "status" => "fail",
-        "error" => $result['error']
-    ]);
-}
- 

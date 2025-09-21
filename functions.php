@@ -1,5 +1,4 @@
 <?php
-
 define("MB", 1048576);
 
 function filterRequest($requestname)
@@ -215,6 +214,64 @@ function Result($count)
         printFailure("failure");
     }
 }
-?>
+require __DIR__ . '/vendor/autoload.php';
 
+function sendFCMTopic($title, $body, $topic = "users") {
+    $serviceAccountPath = __DIR__ . '/mybloomy-2f42b-firebase-adminsdk-fbsvc-d51abb83e8.json';
+    $projectId = "mybloomy-2f42b";
+
+    // إنشاء عميل Google
+    $client = new Google\Client();
+    $client->setAuthConfig($serviceAccountPath);
+    $client->addScope('https://www.googleapis.com/auth/firebase.messaging');
+
+    // توليد Access Token
+    $tokenArray = $client->fetchAccessTokenWithAssertion();
+    if (!isset($tokenArray['access_token'])) {
+        echo "خطأ في توليد التوكن:";
+        print_r($tokenArray);
+        return;
+    }
+
+    $accessToken = $tokenArray['access_token'];
+    echo "Access Token (ضعه في Thunder Client):\n$accessToken\n\n";
+
+    // رابط FCM
+    $url = "https://fcm.googleapis.com/v1/projects/$projectId/messages:send";
+
+    // بناء الرسالة
+    $message = [
+        "message" => [
+            "topic" => $topic,
+            "notification" => [
+                "title" => $title,
+                "body" => $body
+            ],
+            "data" => [
+                "click_action" => "FLUTTER_NOTIFICATION_CLICK"
+            ]
+        ]
+    ];
+
+    // إعداد headers
+    $headers = [
+        "Authorization: Bearer $accessToken",
+        "Content-Type: application/json"
+    ];
+
+    // إرسال الإشعار عبر cURL
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($message));
+    $response = curl_exec($ch);
+    $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    echo "HTTP Status: $httpcode\n";
+    echo "Response: $response\n";
+}
+?>
 
