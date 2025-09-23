@@ -216,7 +216,7 @@ function Result($count)
 }
 require __DIR__ . '/vendor/autoload.php';
 
-function sendFCMTopic($title, $body, $topic = "users") {
+function sendFCMTopic($title, $body, $topic , $pageid , $pagename) {
     $serviceAccountPath = __DIR__ . '/mybloomy-2f42b-firebase-adminsdk-fbsvc-d51abb83e8.json';
     $projectId = "mybloomy-2f42b";
 
@@ -234,12 +234,12 @@ function sendFCMTopic($title, $body, $topic = "users") {
     }
 
     $accessToken = $tokenArray['access_token'];
-    echo "Access Token (ضعه في Thunder Client):\n$accessToken\n\n";
+    //  echo "Access Token (ضعه في Thunder Client):\n$accessToken\n\n";
 
     // رابط FCM
     $url = "https://fcm.googleapis.com/v1/projects/$projectId/messages:send";
 
-    // بناء الرسالة
+    //بناء الرسالة (التصحيح هنا 👇)
     $message = [
         "message" => [
             "topic" => $topic,
@@ -248,10 +248,22 @@ function sendFCMTopic($title, $body, $topic = "users") {
                 "body" => $body
             ],
             "data" => [
-                "click_action" => "FLUTTER_NOTIFICATION_CLICK"
-            ]
+                "pageid" => $pageid,
+                "pagename" => $pagename
+            ],
+            "android" => [
+                "notification" => [
+                    "click_action" => "FLUTTER_NOTIFICATION_CLICK",
+                    "sound" => "default"
+                ]
+            ],
         ]
-    ];
+        ];
+   
+
+
+
+
 
     // إعداد headers
     $headers = [
@@ -270,8 +282,9 @@ function sendFCMTopic($title, $body, $topic = "users") {
     $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
 
-    echo "HTTP Status: $httpcode\n";
-    echo "Response: $response\n";
+    // echo "HTTP Status: $httpcode\n";
+    // echo "Response: $response\n";
 }
+
 ?>
 
